@@ -19,23 +19,8 @@ function App() {
   }, []);
 
   const handleCryptoRowClick = async (symbol) => {
-    if (!isSymbolValid(symbol)) {
-      return;
-    }
-    const priceHistoryResponse = await fetchCryptoPriceHistory(symbol);
-    if (!priceHistoryResponse.ok) {
-      throw new Error(priceHistoryResponse.statusText);
-    }
-    if (priceHistoryResponse.status === 404) {
-      alert("The price history for this symbol could not be found.");
-    } else {
-      const priceHistory = await priceHistoryResponse.json();
-      setPriceHistory(priceHistory);
-    }
-  };
-
-  const isSymbolValid = (symbol) => {
-    return /^[A-Z]{3,}$/.test(symbol);
+    setSelectedCrypto(symbol);
+    setPriceHistory(await fetchCryptoPriceHistory(symbol));
   };
 
   return (
@@ -90,7 +75,7 @@ function App() {
                   maximumFractionDigits: 0,
                 })}
               </td>
-             
+  
             </tr>
           ))}
         </tbody>
